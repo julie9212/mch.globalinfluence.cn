@@ -59,8 +59,10 @@
                           <Icon type="ios-keypad"></Icon>
                           栏目管理
                       </template>
-                      <MenuItem name="2-1">数据统计</MenuItem>
-                      <MenuItem name="2-2">栏目管理</MenuItem>
+                      <MenuItem name="2-1">
+                        <router-link to="/column">栏目管理</router-link>
+                      </MenuItem>
+                      <MenuItem name="2-2">数据统计</MenuItem>
                       <MenuItem name="2-3">内容管理</MenuItem>
                   </Submenu>
                   <Submenu name="3">

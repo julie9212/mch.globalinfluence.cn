@@ -20,7 +20,23 @@ let api = {
         changeStatus: id => {
             return ajax.post('user/changeStatus', id);
         },
-
+    },
+    column: {
+        list: param => { 
+            return ajax.post('column/list', param);
+        },
+        info: id => { 
+            return ajax.post('column/info', id);
+        },
+        insert: param => { 
+            return ajax.post('column/insert', param);
+        },
+        delete: id => {
+            return ajax.post('column/delete', id);
+        },
+        update: param => { 
+            return ajax.post('column/update', param);
+        },
     },
 
 };

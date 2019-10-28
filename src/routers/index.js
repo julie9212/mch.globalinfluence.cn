@@ -14,6 +14,11 @@ export default [
         name: '用户模块',
         component: () => import('../views/user/Index'),
       },
+      {
+        path: '/column',
+        name: '栏目模块',
+        component: () => import('../views/column/Index'),
+      },
     ]
     },
     {
