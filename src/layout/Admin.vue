@@ -62,8 +62,10 @@
                       <MenuItem name="2-1">
                         <router-link to="/column">栏目管理</router-link>
                       </MenuItem>
-                      <MenuItem name="2-2">数据统计</MenuItem>
-                      <MenuItem name="2-3">内容管理</MenuItem>
+                      <MenuItem name="2-2">
+                        <router-link to="/content/null">内容管理</router-link>
+                      </MenuItem>
+                      <MenuItem name="2-3">其他栏目</MenuItem>
                   </Submenu>
                   <Submenu name="3">
                       <template slot="title">

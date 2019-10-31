@@ -38,6 +38,31 @@ let api = {
             return ajax.post('column/update', param);
         },
     },
+    subcolumn: {
+        list: param => { 
+            return ajax.post('subcolumn/list', param);
+        },
+        info: id => { 
+            return ajax.post('subcolumn/info', id);
+        },
+        insert: param => { 
+            return ajax.post('subcolumn/insert', param);
+        },
+        delete: id => {
+            return ajax.post('subcolumn/delete', id);
+        },
+        update: param => { 
+            return ajax.post('subcolumn/update', param);
+        },
+        changeType : id => { 
+            return ajax.post('subcolumn/changeType', id);
+        },
+    },
+    content: {
+        list: param => { 
+            return ajax.post('content/list', param);
+        },
+    },
 
 };
 

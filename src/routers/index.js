@@ -19,6 +19,16 @@ export default [
         name: '栏目模块',
         component: () => import('../views/column/Index'),
       },
+      {
+        path: '/subcolumn/:id',
+        name: '子栏目模块',
+        component: () => import('../views/subcolumn/Index'),
+      },
+      {
+        path: '/content/:id',
+        name: '子栏目模块',
+        component: () => import('../views/content/Index'),
+      },
     ]
     },
     {
