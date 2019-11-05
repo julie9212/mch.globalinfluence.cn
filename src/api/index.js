@@ -58,6 +58,23 @@ let api = {
             return ajax.post('subcolumn/changeType', id);
         },
     },
+    listcontent: {
+        list: param => { 
+            return ajax.post('listcontent/list', param);
+        },
+        info: id => { 
+            return ajax.post('listcontent/info', id);
+        },
+        delete: id => {
+            return ajax.post('listcontent/delete', id);
+        },
+        update: param => { 
+            return ajax.post('listcontent/update', param);
+        },
+        changeExamine : id => { 
+            return ajax.post('listcontent/changeExamine', id);
+        },
+    },
     content: {
         list: param => { 
             return ajax.post('content/list', param);

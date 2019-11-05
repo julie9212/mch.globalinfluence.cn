@@ -167,7 +167,6 @@
             async info () {
                 let res = await this.$api.column.info({id:this.form.id});
                 if(res){
-                    console.log(res.id);
                     this.form = res;
                     this.modal.title = '修改顶级栏目';
                     this.modal.is_show = true;

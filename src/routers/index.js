@@ -25,8 +25,13 @@ export default [
         component: () => import('../views/subcolumn/Index'),
       },
       {
-        path: '/content/:id',
+        path: '/listcontent/:id',
         name: '子栏目模块',
+        component: () => import('../views/listcontent/Index'),
+      },
+      {
+        path: '/content/:id',
+        name: '内容模块',
         component: () => import('../views/content/Index'),
       },
     ]

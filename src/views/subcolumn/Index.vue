@@ -135,7 +135,7 @@
                         key: 'type',
                         align: "center",
                         render :(h,param) => {
-                            console.log(param.row.type);
+                            // console.log(param.row.type);
                             let type;
                             if(param.row.type == 1){
                                 type = "内容";
@@ -185,7 +185,7 @@
                                         this.content(param.row.id);
                                     }
                                 }
-                            },'内容');
+                            },'查看');
                         }, 
                     },
                 ],
@@ -235,17 +235,17 @@
             async info () {
                 let res = await this.$api.subcolumn.info({id:this.form.id});
                 if(res){
-                    console.log(res.id);
+                    // console.log(res.id);
                     this.form = res;
-                    console.log(this.form);
+                    // console.log(res.authority);
                     this.modal.title = '修改顶级栏目';
                     this.modal.is_show = true;
                 }
             },
             async update(form){
-                console.log(form);
+                // console.log(form);
                 let res = await this.$api.subcolumn.update(form);
-                console.log(res);
+                // console.log(res);
                 if(res){
                     this.list();
                     this.$Message.success('修改成功');
@@ -273,7 +273,7 @@
             async delete(id){
                 // console.log(id);
                 let res = await this.$api.subcolumn.delete({id:id});
-                console.log(res);
+                // console.log(res);
                 if(res){
                     this.list();
                     this.$Message.success('删除成功');
@@ -289,7 +289,7 @@
             // 子栏目跳转
             content(n){
                 let urlSub = n;
-                this.$router.push({ path:'/content/'+urlSub  })
+                this.$router.push({ path:'/listcontent/'+urlSub  })
             }
         }
     }

@@ -63,7 +63,7 @@
                         <router-link to="/column">栏目管理</router-link>
                       </MenuItem>
                       <MenuItem name="2-2">
-                        <router-link to="/content/null">内容管理</router-link>
+                        <router-link to="/listcontent/all">内容管理</router-link>
                       </MenuItem>
                       <MenuItem name="2-3">其他栏目</MenuItem>
                   </Submenu>
@@ -75,15 +75,22 @@
                       <MenuItem name="3-1">
                         <router-link to="/user">用户信息</router-link>
                       </MenuItem>
-                      <MenuItem name="3-2">用户</MenuItem>
+                      <MenuItem name="3-2">加入申请</MenuItem>
                   </Submenu>
                   <Submenu name="4">
                       <template slot="title">
                           <Icon type="ios-analytics"></Icon>
+                          合作管理
+                      </template>
+                      <MenuItem name="4-1">加入申请</MenuItem>
+                  </Submenu>
+                  <Submenu name="5">
+                      <template slot="title">
+                          <Icon type="ios-analytics"></Icon>
                           系统
                       </template>
-                      <MenuItem name="4-1">系统基本参数</MenuItem>
-                      <MenuItem name="4-2">系统用户管理</MenuItem>
+                      <MenuItem name="5-1">系统基本参数</MenuItem>
+                      <MenuItem name="5-2">系统用户管理</MenuItem>
                   </Submenu>
               </Menu>
           </Sider>

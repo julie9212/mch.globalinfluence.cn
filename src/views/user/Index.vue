@@ -20,7 +20,7 @@
                 </Row>
             </Col>
         </Row><br>
-        <Table  height="400" border :columns="columns1" :data="data1" :loading="loading"></Table><br>
+        <Table  height="400" border :columns="columns1" :data="data1" :loading="loading"></Table>
         <!-- <Page :total="page.total" @on-change="page()"  show-elevator show-total></Page> -->
         <Page :total="total" @on-change="page"></Page>
 
