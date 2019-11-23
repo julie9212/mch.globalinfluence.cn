@@ -138,9 +138,9 @@
                             // console.log(param.row.type);
                             let type;
                             if(param.row.type == 1){
-                                type = "内容";
-                            }else{
                                 type = "列表";
+                            }else{
+                                type = "内容";
                             }
                             return h('div',[
                                 h('span',{
@@ -158,7 +158,7 @@
                                         click:()=>{
                                             this.$Modal.confirm({
                                                 title:"提示",
-                                                content:"确定将栏目类型改为 ["+type+"] 吗",
+                                                content:"确定修改栏目类型吗",
                                                 onOk:() =>{
                                                     this.changeType(param.row.id);
                                                 }
@@ -198,7 +198,7 @@
             this.list();
         },
         methods:{
-             async list(){
+            async list(){
                 this.loading = true;
                 let res = await this.$api.subcolumn.list({id:this.$route.params.id});
                 // console.log(res);

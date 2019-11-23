@@ -1,104 +1,99 @@
 <template>
     <div>
-        <h2>文章管理</h2>
+        <h2>文章审核</h2>
+        <br>    
         <Row>
-            <Col span="2">
-            <!-- <router-link to="/content/1/2"><Button type="info">添加文章</Button></router-link> -->
-                <Button type="info" @click="addContent">添加文章</Button>
-            </Col>
-            <Col span="8" offset="14">
-                <Row>
-                    <Form inline>
-                        <Form-item prop="search">
-                            <Input v-model="search.value">
-                                <Select v-model="search.type" slot="prepend" style="width: 80px">
-                                    <Option v-for="(item,index) in searchList" :key="index" :value="item.value">{{item.title}}</Option>
-                                </Select>
-                                <Button @click="list" slot="append" icon="ios-search"></Button>
-                            </Input>
-                        </Form-item>
-                    </Form>
-                </Row>
-            </Col>
-        </Row><br>
-        <Row>
-            <Col span="24">
-                <Table height="400" :columns="columns" :data="data"></Table>
-            </Col>
-        </Row><br>
-        <Page :total="total" @on-change="page" show-total></Page>
-
-        <Modal
-            v-model="modal.is_show"
-            :title="modal.title"
-            @on-ok="ok">
-                <Form :model="form" :label-width="80">
-                    <Form-item label="标题">
-                        <Input v-model="form.title" placeholder="请输入"></Input>
+            <Col span="16" offset="8">
+                <Form inline>
+                    <Form-item prop="search">
+                        <Input v-model="search.value">
+                            <Select v-model="search.type" slot="prepend" style="width: 80px">
+                                <Option v-for="(item,index) in searchList.type" :key="index" :value="item.value">{{item.title}}</Option>
+                            </Select>
+                        </Input>
                     </Form-item>
-                    <Form-item label="作者">
-                        <Input v-model="form.writer" placeholder="请输入"></Input>
-                    </Form-item>
-                    <Form-item label="所属栏目">
-                        <Select v-model="form.column_id">
-                            <Option v-for="item in column" :value="item.id">{{item.pid_name}} => {{ item.name }}</Option>
+                    <Form-item prop="search">选择类型：
+                        <Select v-model="search.examine" style="width:200px">
+                            <Option v-for="item in searchList.examine" :value="item.value">{{ item.title }}</Option>
                         </Select>
                     </Form-item>
-                    <Form-item label="排序">
-                        <Input v-model="form.sort" placeholder="请输入"></Input>
+                     <Form-item prop="search">
+                        <Button type="primary" @click="list" size="small">确定</Button>
                     </Form-item>
-                    <Form-item label="权限">
-                        <Radio-group v-model="form.authority">
-                            <Radio label="0">all</Radio>
-                            <Radio label="1">vip</Radio>
-                        </Radio-group>
-                    </Form-item>
-                    <Form-item label="审核">
-                        <Radio-group v-model="form.examine">
-                            <Radio label="1">未审核</Radio>
-                            <Radio label="2">已审核</Radio>
-                            <Radio label="3">驳回</Radio>
-                        </Radio-group>
-                    </Form-item>
-                    <Form-item label="审核原因:">
-                        <Input type="text" v-model="form.examine_reason" placeholder="请输入审核情况"></Input>
-                    </Form-item>
-
                 </Form>
-        </Modal><br>
+            </Col>
+        </Row><br>
+        <Table  height="400" border :columns="columns" :data="data" :loading="loading"></Table>
+        <br>
+        <Page :total="total" @on-change="page" show-total></Page>
+        <Modal
+            v-model="infos2.is_show"
+            :title="infos2.title"
+            @on-ok="is_ok">
+            <Form :model="form" :label-width="80">
+                <Radio-group v-model="form.examine">
+                    审核：
+                    <Radio label="1"><span>未审核</span></Radio>
+                    <Radio label="2"><span>通过</span></Radio>
+                    <Radio label="3"><span>驳回</span></Radio>
+                </Radio-group>
+                <Form-item label="审核原因:">
+                    <Input type="text" v-model="form.examine_reason" placeholder="请输入审核情况"></Input>
+                </Form-item>
+            </Form> 
+        </Modal>
     </div>
 </template>
 <script>
     export default {
-        data () {
+         data () {
             return {
-                modal:{
-                    title:'',
-                    is_show:false,
+                loading: false,
+                infos2:{
+                    title: "",
+                    is_show: false,
                 },
-                form:{
-                    title: '',
-                    writer: '',
-                    column_id: '',
-                    sort: '',
-                    authority: '',
+                infosList: '',
+                form: {
                     examine: '',
                     examine_reason:'',
                 },
                 search:{
                     value : '',
                     type: 'title',
+                    examine: '',
                 },
-                searchList : [
-                    {
-                        value : 'title',
-                        title :'标题',
-                    },
-                    {
-                        value : 'writer',
-                        title :'作者',
-                    },
-                ],
+                searchList : {
+                    type: [
+                        {
+                            value : 'title',
+                            title :'标题',
+                        },
+                        {
+                            value : 'writer',
+                            title :'作者',
+                        },
+                    ],
+                    examine: [
+                         {
+                            value : 'all',
+                            title :'全部',
+                        },
+                        {
+                            value : '1',
+                            title :'未审核',
+                        },
+                        {
+                            value : '2',
+                            title :'通过',
+                        },
+                        {
+                            value : '3',
+                            title :'驳回',
+                        },
+                    ],
+
+                },
                 columns: [
                     {
                         title: 'id',
@@ -125,12 +120,7 @@
                         }, 
                     },
                     {
-                        title: '排序(倒序)',
-                        key: 'sort',
-                        align: "center",
-                    },
-                    {
-                        title: '创建时间',
+                        title: '提交时间',
                         key: 'create_time',
                         align: "center"
                     },
@@ -157,14 +147,35 @@
                             if(param.row.examine == 1){
                                 examine = "未审核";
                             }else if(param.row.examine == 2){
-                                examine = "已审核";
-                            }else  if(param.row.examine == 3){
+                                examine = "通过";
+                            }else if(param.row.examine == 3){
                                 examine = "驳回";
                             }else{
-                                examine = "审核错误";
+                                examine = "执行错误";
                             }
-                            return h('div',{},examine);
-                        }
+                            return h("div",[
+                                h("span",{},examine),
+                                h("Button",{
+                                    props:{
+                                        type:"warning",
+                                        size:"small",
+                                    },
+                                    style:{
+                                        margin:"0 5px",
+                                    },
+                                    on:{
+                                       click:()=>{
+                                            this.infos2.is_show = true;
+                                            this.infos2.id = param.row.id;
+                                            console.log(param.row);
+                                            this.form = param.row;
+                                            this.form.examine = param.row.examine + '';
+                                            this.infos2.title = '审核';
+                                        }
+                                    }
+                                },"修改")
+                            ],examine)
+                        },
                     },
                     {
                         title: '操作',
@@ -172,21 +183,6 @@
                         align: "center",
                         render :(h,param) => {
                             return h('div',[
-                                h('Button',{
-                                    props:{
-                                        type:"warning",
-                                        size:"small"
-                                    },
-                                    on:{
-                                        click:()=>{
-                                            // 修改栏目
-                                            this.modal.is_show = true;
-                                            this.form.id = param.row.id;
-                                            this.modal.title = '修改';
-                                            this.info();
-                                        }
-                                    }
-                                },'修改'),
                                 h('Button',{
                                     props:{
                                         type:"error",
@@ -230,8 +226,6 @@
                         }, 
                     },
                 ],
-                column: [],
-                column_id: 'all',
                 data: [],
                 total: 1,
             }
@@ -245,12 +239,12 @@
                 let search = this.search.value;
                 let param = {
                     page:page,
-                    id:this.$route.params.id,
                     search:this.search.type,
                     searchvalue:this.search.value,
+                    examine:this.search.examine,
                 }
                 // console.log(param);
-                let res = await this.$api.listcontent.list(param);
+                let res = await this.$api.examine.list(param);
                 console.log(res);
                 if(res){
                     this.data = res.data;
@@ -264,6 +258,24 @@
             page(num){
                 this.list(num);
             },
+            // // 修改
+            async update (form) {
+                let res = await this.$api.examine.examine(form);
+                if(res){
+                    this.list();
+                    this.$Message.success('修改成功');
+                }
+            },
+            is_ok(){
+                this.update(this.form);
+            },
+            async delete (id) {
+                let res = await this.$api.examine.delete({id});
+                if(res){
+                    this.list();
+                    this.$Message.success('删除成功');
+                }
+            },
             listColumn_id(n){
                 let column_id = this.column;
                 for (var i in column_id){
@@ -272,49 +284,11 @@
                     }
                 }
             },
-            async info () {
-                let res = await this.$api.listcontent.info({id:this.form.id});
-                if(res){
-                    this.form = res;
-                    this.form.authority = res.authority+'';
-                    this.form.examine = res.examine+'';
-                }
-                console.log(res.authority);
-            },
-            async update(form){
-                let res = await this.$api.listcontent.update(form);
-                if(res){
-                    this.list();
-                    this.$Message.success('修改成功');
-                }
-            },
-            ok(){
-                this.update(this.form);
-            },
-            async delete(id){
-                let res = await this.$api.listcontent.delete({id:id});
-                if(res){
-                    this.list();
-                    this.$Message.success('删除成功');
-                }
-            },
-            async changeExamine (id) {
-                let res = await this.$api.listcontent.changeExamine({id});
-                if(res){
-                    this.list();
-                    this.$Message.success('操作成功');
-                }
-            },
-            // 内容跳转
-            addContent(){
-                let column_id = this.column_id;
-                this.$router.push({ path:'/content/'+ column_id + '/insert'  })
-            },
             updataContent(n){
                 let column_id = this.column_id;
                 let centent_id = n;
                 this.$router.push({ path:'/content/'+ column_id + '/' + centent_id  })
             }
         }
-    }
+    }           
 </script>

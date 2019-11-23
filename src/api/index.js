@@ -1,6 +1,17 @@
 import ajax from './axios';
 
 let api = {
+    common: {
+        login: param => {
+            return ajax.post('common/login', param);
+        },
+        loginInfo: () => { 
+            return ajax.post('common/loginInfo');
+        },
+        out: () => { 
+            return ajax.post('common/out');
+        },
+    },
     user: {
         list: param => { 
             return ajax.post('user/list', param);
@@ -17,8 +28,14 @@ let api = {
         update: param => { 
             return ajax.post('user/update', param);
         },
-        changeStatus: id => {
-            return ajax.post('user/changeStatus', id);
+        passup: param => {
+            return ajax.post('user/passup', param);
+        },
+        collectInfo: id => {
+            return ajax.post('user/collectInfo', id);
+        },
+        downloadInfo: id => {
+            return ajax.post('user/downloadInfo', id);
         },
     },
     column: {
@@ -78,6 +95,65 @@ let api = {
     content: {
         list: param => { 
             return ajax.post('content/list', param);
+        },
+        insert: param => { 
+            return ajax.post('content/insert', param);
+        },
+        update: param => { 
+            return ajax.post('content/update', param);
+        },
+    },
+    examine: {
+        list: param => { 
+            return ajax.post('examine/list', param);
+        },
+        delete: id => {
+            return ajax.post('examine/delete', id);
+        },
+       examine: param => { 
+            return ajax.post('examine/examine', param);
+        },
+    },
+    ad: {
+        list: param => { 
+            return ajax.post('ad/list', param);
+        },
+        info: id => { 
+            return ajax.post('ad/info', id);
+        },
+        insert: param => { 
+            return ajax.post('ad/insert', param);
+        },
+        delete: id => {
+            return ajax.post('ad/delete', id);
+        },
+        update: param => { 
+            return ajax.post('ad/update', param);
+        },
+    },
+    application: {
+        list: param => { 
+            return ajax.post('application/list', param);
+        },
+        delete: id => {
+            return ajax.post('application/delete', id);
+        },
+        info: id => { 
+            return ajax.post('application/info', id);
+        },
+        examine: param => { 
+            return ajax.post('application/examine', param);
+        },
+    },
+    admininfo: {
+        list: param => { 
+            return ajax.post('admininfo/list', param);
+        },
+        passupdate: param => { 
+            return ajax.post('admininfo/passupdate', param);
+        },
+        update: param => { 
+            return ajax.post('admininfo/update', param);
         },
     },
 

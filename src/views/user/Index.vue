@@ -20,9 +20,9 @@
                 </Row>
             </Col>
         </Row><br>
-        <Table  height="400" border :columns="columns1" :data="data1" :loading="loading"></Table>
-        <!-- <Page :total="page.total" @on-change="page()"  show-elevator show-total></Page> -->
-        <Page :total="total" @on-change="page"></Page>
+        <Table  border :columns="columns1" :data="data1" :loading="loading"></Table>
+        <br>
+        <Page :total="total" @on-change="page" show-total></Page>
 
         <Modal
             v-model="infos.is_show"
@@ -32,8 +32,8 @@
                 <Form-item label="用户">
                     <Input type="text" v-model="form.username" placeholder="请输入用户名称"></Input>
                 </Form-item>
-                <Form-item label="密码">
-                    <Input type="password" v-model="form.password" placeholder="请输入用户密码"></Input>
+                <Form-item label="手机号">{{form.phone}}
+                    <Input type="text" v-model="form.phone" placeholder="请输入手机号"></Input>
                 </Form-item>
                 <Form-item label="用户类型">
                     <Radio-group v-model="form.vip">
@@ -50,12 +50,55 @@
                 <Form-item label="上传头像">
                 <Upload
                     ref="uploadFile"
-                    action="http://api.globalinfluence.com/admin.php/admin/system/upload"
+                    action="http://mchapi.globalinfluence.cn/admin.php/admin/system/upload"
                     :on-success="uploadSuccess">
                     <Button icon="ios-cloud-upload-outline">上传文件</Button>
                 </Upload>
+                <img :src="form.head_url" style="height:100px">
                 </Form-item>
             </Form> 
+        </Modal>
+
+        <Modal
+            v-model="pass.is_show"
+            :title="pass.title"
+            @on-ok="okPass"
+            >
+            <Form :model="pass" :label-width="80">
+                <Form-item label="修改密码">{{pass.password}}
+                    <Input type="password" v-model="pass.password" placeholder="请输入新密码"></Input>
+                </Form-item>
+            </Form> 
+        </Modal>
+
+        <Modal
+            v-model="see.is_show"
+            :title="see.title"
+            @on-ok="okSee"
+            >
+            <Row>
+                <Col span="24">
+                    <Card>
+                        <ul>
+                            <li v-for="item in seeinfos" style="list-style-type:none;">
+                                <a :href="item.url" target="_blank">
+                                    <Row>
+                                        <Col span="21">
+                                            <span>id: {{ item.id }} -- 标题: {{ item.title }}</span>
+                                        </Col>
+                                        <Col span="3">
+                                            <span style="padding-left:20px">查看</span>
+                                        </Col>
+                                    </Row>
+                                 </a>
+                            </li>
+
+                            
+                        </ul>
+                    </Card>
+                </Col>
+            </Row>
+
         </Modal>
     </div>
 </template>
@@ -64,10 +107,20 @@
          data () {
             return {
                 loading: false,
+                pass:{
+                    title: "修改密码",
+                    is_show: false,
+                    password: '',
+                },
                 infos:{
                     title: "",
                     is_show: false,
                 },
+                see:{
+                    title: "",
+                    is_show: false,
+                },
+                seeinfos:[],
                 search:{
                     value : '',
                     type: 'username',
@@ -80,7 +133,8 @@
                 ],
                 form: {
                     username: '',
-                    password: '',
+                    password: 'root',
+                    phone: '',
                     vip: '1',
                     status: '1',
                     head_url: '',
@@ -94,6 +148,11 @@
                     {
                         title: '姓名',
                         key: 'username',
+                        align: "center"
+                    },
+                    {
+                        title: '手机',
+                        key: 'phone',
                         align: "center"
                     },
                     {
@@ -136,29 +195,8 @@
                             if(param.row.status == 2){
                                 btnType = "default";
                             }
-                            return h('Button',{
-                                props:{
-                                    type:btnType,
-                                    size:"small"
-                                },
-                                on:{
-                                    click:() => {
-                                        let status_text = '启用';
-                                        let status = 1;
-                                        if (param.row.status == 1) {
-                                            status_text = '禁用';
-                                            status = 2;
-                                        }
-                                        this.$Modal.confirm({
-                                            title:'提示',
-                                            content:"确定要"+status_text+'此账户吗',
-                                            onOk: () => {
-                                                this.changeStatus(param.row.id);
-                                            }
-                                        });
-                                    }
-                                }
-                            },param.row.status == 1 ? '禁用' :'启用');
+                            return h('div',{
+                            },param.row.status == 1 ? '启用' :'禁用');
                         },
                     },
                     {
@@ -203,7 +241,67 @@
                                             })
                                         }
                                     }
-                                },"删除")
+                                },"删除"),
+                                h("Button",{
+                                    props:{
+                                        type:"warning",
+                                        size:"small",
+                                    },
+                                    style:{
+                                        margin:"0 5px",
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.pass.is_show = true;
+                                            this.pass.id = param.row.id;
+                                        }
+                                    }
+                                },"密码"),
+                            ])
+                        }
+                    },
+                    {
+                        title: '查看',
+                        key: 'action',
+                        align: 'center',
+                        render :(h,param) => {
+                            return h("div",[
+                                h("Button",{
+                                    props:{
+                                        type:"text",
+                                        size:"small"
+                                    },
+                                    style:{
+                                        margin:"0 5px",
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.see.is_show = true;
+                                            this.see.id = param.row.id;
+                                            this.see.type = 1;
+                                            this.see.title = '查看用户收藏';
+                                            this.seeinfo(param.row.id);
+                                        }
+                                    }
+                                },"收藏"),
+                                h("Button",{
+                                    props:{
+                                        type:"text",
+                                        size:"small",
+                                    },
+                                    style:{
+                                        margin:"0 5px",
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.see.is_show = true;
+                                            this.see.id = param.row.id;
+                                            this.see.type = 2;
+                                            this.see.title = '查看用户下载';
+                                            this.seeinfo(param.row.id);
+                                        }
+                                    }
+                                },"下载"),
                             ])
                         }
                     },
@@ -223,11 +321,9 @@
                 }
                 param[this.search.type] = this.search.value;
                 let res = await this.$api.user.list(param);
-                console.log(param);
                 if(res){
                     this.data1 = res.data;
                     this.total = res.total;
-                    console.log(res);
                 }
                this.loading = false;
             },
@@ -241,6 +337,9 @@
                 if (res) {
                     console.log(res);
                     this.form = res;
+                    this.form.vip = res.vip+'';
+                    this.form.status = res.status+ '';
+                    this.form.status = res.status+ '';
                 }
                 this.$Spin.hide();
             },
@@ -248,9 +347,9 @@
             async update (form) {
                 let res = await this.$api.user.update(form);
                 if(res){
+                    console.log(res);
                     this.list();
-                    this.clear();
-                    this.$Message.success('添加成功');
+                    this.$Message.success('修改成功');
                 }
             },
             add(){
@@ -258,6 +357,7 @@
                 this.infos.is_show = true;
             },
             async insert (form) {
+                // console.log(form);
                 let res = await this.$api.user.insert(form);
                 if(res){
                     this.list();
@@ -270,11 +370,12 @@
             clear(){ 
                 this.form = {
                     username: '',
-                    password: '',
+                    phone:'',
                     vip: '1',
                     status: '1',
                     head_url: '',
                 };
+                this.pass.password = '';
                 this.$refs.uploadFile.clearFiles();
             },
             ok(){
@@ -282,29 +383,36 @@
                     // 修改
                     this.update(this.form);
                 }else{
-                    // 添加 form  传入username,password,vip,status,head_url
+                    // 添加 form  传入username,vip,status,head_url,phone
                     this.insert({
                         username:this.form.username,
                         password:this.form.password,
+                        phone:this.form.phone,
                         vip:this.form.vip,
                         status:this.form.status,
                         head_url:this.form.head_url,
                     })
                 }
             },
+            async passup (pass) {
+                console.log(pass)
+                let res = await this.$api.user.passup(pass);
+                console.log(res);
+                if(res){
+                    this.list();
+                    this.clear();
+                    this.$Message.success('密码修改成功');
+                }
+            },
+            okPass(){
+                this.passup(this.pass);
+            },
             uploadSuccess(res){
                 if(res.ret == 200){
                     this.form.head_url = res.data;
-                    console.log(res);
+                    // console.log(res);
                 }else{
                     this.$Message.error(res.msg);
-                }
-            },
-            async changeStatus (id) {
-                let res = await this.$api.user.changeStatus({id});
-                if(res){
-                    this.list();
-                    this.$Message.success('操作成功');
                 }
             },
             async delete (id) {
@@ -314,6 +422,32 @@
                     this.$Message.success('删除成功');
                 }
             },
+            async collectInfo(id){
+                let res = await this.$api.user.collectInfo({id});
+                console.log(res.info);
+                if(res){
+                    this.seeinfos = res.info.collect;
+                }
+            },
+            async downloadInfo(id){
+                let res = await this.$api.user.downloadInfo({id});
+                console.log(res);
+                if(res){
+                    this.seeinfos = res.info.download;
+                }
+            },
+            seeinfo(id){
+                if(this.see.type == 1){
+                    this.collectInfo(id);
+                }else if(this.see.type == 2){
+                    this.downloadInfo(id);
+                }else{
+                    this.$Message.error('数据错误，请重新请求');
+                }
+            },
+            okSee(){
+                this.see.is_show = false;
+            }
         }
     }
 </script>

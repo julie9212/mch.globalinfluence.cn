@@ -1,95 +1,99 @@
 <template>
     <div>
-        <h2>内容管理</h2>
-        <Row>
-            <!-- <Col span="2">
-                <Button type="info" @click="add">内容列表</Button>
-            </Col> -->
-        </Row><br>
-
-        
-        <quill-editor
-          v-model="content"
-          :content="content"
-          :options="editorOption"
-          @blur="onEditorBlur($event)"
-          @focus="onEditorFocus($event)"
-          @ready="onEditorReady($event)">
-        </quill-editor>
-
-
+        <div style="background:#eee;padding: 1px">
+            <Card :bordered="false">
+                <p slot="title">添加文章</p>
+                    <Row>
+                        <Col span="24">
+                            <div class="edit_container">
+                                <quill-editor 
+                                    v-model="content" 
+                                    ref="myQuillEditor" 
+                                    :options="editorOption" 
+                                    @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
+                                    @change="onEditorChange($event)">
+                                </quill-editor>
+                                <button v-on:click="saveHtml">保存</button>
+                            </div>  
+                        </Col>
+                    </Row>
+            </Card>
+        </div>
     </div>
 </template>
+
 <script>
 
 import { quillEditor } from 'vue-quill-editor'
+// 工具栏配置
+    const toolbarOptions = [
+      ['bold', 'italic', 'underline'],
+      [{'size': ['small', false, 'large', 'huge']}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
+      ['image'],                                // remove formatting button
+    ]
 
-export default {
-  data () {
-    return {
-      name: 'register-modules-example',
-      content: `1231`,
-      editorOption: {
-        modules: {
-          history: {
-            delay: 1000,
-            maxStack: 50,
-            userOnly: false
-          },
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ 'header': 1 }, { 'header': 2 }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'direction': 'rtl' }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'font': [] }],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'align': [] }],
-            ['clean'],
-            ['link', 'image', 'video']
-          ],
-          imageDrop: true,
-          imageResize: {
-            displayStyles: {
-              backgroundColor: 'black',
-              border: 'none',
-              color: 'white'
-            },
-            modules: {
-toolbar: {
-  container: toolbarOptions,
-  handlers: {
-    'image': function (value) {
-      if (value) {
-        // 调用element UI图片上传
-        document.querySelector('#uploadImg .el-upload').click()
-      } else {
-        this.quill.format('image', false)
-      }
-    }
-  }
-},                
+     export default {
+        data(){
+             return{
+                content: `<p>hello world</p>`,
+                editorOption: {
+                    theme:'snow',   
+                }
             }
-          }
-        }
-      }
-    }
-  },
-  methods: {
-    onEditorBlur (editor) {
-      // console.log('editor blur!', editor)
-      console.log(editor)
-    },
-    onEditorFocus (editor) {
-      // console.log('editor focus!', editor)
-    },
-    onEditorReady (editor) {
-      // console.log('editor ready!', editor)
-    }
-  }
-}
+         },
+        computed: {
+            editor() {
+                return this.$refs.myQuillEditor.quill;
+            },
+        },
+        methods: {
+            onEditorReady(editor) { // 准备编辑器
+                
+            },
+            onEditorBlur(){
+
+            }, // 失去焦点事件
+            onEditorFocus(val,editor){
+                console.log(val); // 富文本获得焦点时的内容
+                // console.log(val.container.innerHTML); 
+                // console.log(this.$refs.myQuillEditor.quill); 
+                // editor.enable(false); // 在获取焦点的时候禁用
+            }, // 获得焦点事件
+            onEditorChange(){
+
+            }, // 内容改变事件
+            saveHtml:function(event){
+                alert(this.content);
+            }
+        },
+        modules:{
+            toolbar:[
+              ['bold', 'italic', 'underline', 'strike'],    //加粗，斜体，下划线，删除线
+              ['blockquote', 'code-block'],     //引用，代码块
+  
+              [{ 'header': 1 }, { 'header': 2 }],        // 标题，键值对的形式；1、2表示字体大小
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],     //列表
+              [{ 'script': 'sub'}, { 'script': 'super' }],   // 上下标
+              [{ 'indent': '-1'}, { 'indent': '+1' }],     // 缩进
+              [{ 'direction': 'rtl' }],             // 文本方向
+  
+  
+              [{ 'size': ['small', false, 'large', 'huge'] }], // 字体大小
+              [{ 'header': [1, 2, 3, 4, 5, 6, false] }],     //几级标题
+  
+  
+              [{ 'color': [] }, { 'background': [] }],     // 字体颜色，字体背景颜色
+              [{ 'font': [] }],     //字体
+              [{ 'align': [] }],    //对齐方式
+  
+  
+              ['clean'],    //清除字体样式
+              ['image','video']    //上传图片、上传视频
+  
+            ]
+          },
+     }
 </script>

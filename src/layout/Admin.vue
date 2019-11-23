@@ -3,38 +3,37 @@
       <Header>
           <Menu mode="horizontal" theme="dark" active-name="1">
               <div class="layout-logo">
-                <p style="color:#fff">julie后台管理</p> 
-                <!-- <img src="./assets/logo.png" style="width:50%"> -->
+                <p style="color:#fff">julie后台管理系统</p> 
               </div>
               <div class="layout-nav">
                   <MenuItem name="1" @click="putUps(0)">
                   <Icon type="ios-contact" style="font-size:18px" />
-                      julie
+                      {{admin.admin}}
                   </MenuItem>
                   <MenuItem name="2" @click="putUps(0)">
                       <Icon type="ios-keypad"></Icon>
                       首页
                   </MenuItem>
                   <MenuItem name="3">
-                        <!-- <Icon type="ios-analytics"></Icon>
-                        设置 -->
                     <Dropdown>
                         <a href="javascript:void(0)">
                             <Icon type="ios-analytics"></Icon>
                             设置
                         </a>
                         <Dropdown-menu slot="list">
-                            <Dropdown-item>驴打滚</Dropdown-item>
-                            <Dropdown-item>炸酱面</Dropdown-item>
-                            <Dropdown-item disabled>豆汁儿</Dropdown-item>
-                            <Dropdown-item>冰糖葫芦</Dropdown-item>
-                            <Dropdown-item divided>北京烤鸭</Dropdown-item>
+                            <Dropdown-item>设置1</Dropdown-item>
+                            <Dropdown-item>设置2</Dropdown-item>
+                            <Dropdown-item disabled>设置3</Dropdown-item>
+                            <Dropdown-item>设置4</Dropdown-item>
+                            <Dropdown-item divided>设置5</Dropdown-item>
                         </Dropdown-menu>
                     </Dropdown>
                   </MenuItem>
                   <MenuItem name="4">
-                      <Icon type="ios-paper"></Icon>
-                      退出
+                      <p @click="out">
+                          <Icon type="ios-paper"></Icon>退出
+                      </p>
+                      
                   </MenuItem>
               </div>
           </Menu>
@@ -51,8 +50,6 @@
                       <MenuItem name="1-1">
                         <router-link to="/">首页</router-link>
                       </MenuItem>
-                      <MenuItem name="1-2">数据1</MenuItem>
-                      <MenuItem name="1-3">数据2</MenuItem>
                   </Submenu>
                   <Submenu name="2">
                       <template slot="title">
@@ -62,35 +59,45 @@
                       <MenuItem name="2-1">
                         <router-link to="/column">栏目管理</router-link>
                       </MenuItem>
-                      <MenuItem name="2-2">
-                        <router-link to="/listcontent/all">内容管理</router-link>
-                      </MenuItem>
-                      <MenuItem name="2-3">其他栏目</MenuItem>
                   </Submenu>
                   <Submenu name="3">
                       <template slot="title">
                           <Icon type="ios-analytics"></Icon>
-                          用户管理
+                          提交管理
                       </template>
                       <MenuItem name="3-1">
-                        <router-link to="/user">用户信息</router-link>
+                        <router-link to="/examine">文章审核</router-link>
                       </MenuItem>
-                      <MenuItem name="3-2">加入申请</MenuItem>
+                      <MenuItem name="3-2">
+                        <router-link to="/application">合作申请</router-link>
+                      </MenuItem>
                   </Submenu>
                   <Submenu name="4">
                       <template slot="title">
                           <Icon type="ios-analytics"></Icon>
-                          合作管理
+                          用户管理
                       </template>
-                      <MenuItem name="4-1">加入申请</MenuItem>
+                      <MenuItem name="4-1">
+                        <router-link to="/user">用户信息</router-link>
+                      </MenuItem>
                   </Submenu>
                   <Submenu name="5">
                       <template slot="title">
                           <Icon type="ios-analytics"></Icon>
+                          广告管理
+                      </template>
+                      <MenuItem name="5-1">
+                        <router-link to="/ad">广告</router-link>
+                      </MenuItem>
+                  </Submenu>
+                  <Submenu name="6">
+                      <template slot="title">
+                          <Icon type="ios-analytics"></Icon>
                           系统
                       </template>
-                      <MenuItem name="5-1">系统基本参数</MenuItem>
-                      <MenuItem name="5-2">系统用户管理</MenuItem>
+                      <MenuItem name="6-1">
+                        <router-link to="/admininfo">系统基本参数</router-link>
+                      </MenuItem>
                   </Submenu>
               </Menu>
           </Sider>
@@ -113,19 +120,42 @@
 
 <script scoped>
 export default {
-    
+    data(){
+        return {
+            admin:[],
+        }
+    },
+    mounted(){
+        this.getInfo();
+    },
+    methods:{
+        async getInfo(){
+            let res = await this.$api.common.loginInfo();
+            if (res) {
+                this.admin = res;
+            }
+        },
+        async outInfo(){
+            let res = await this.$api.common.out();
+            if (res) {
+                this.$router.push('/login');
+                this.$Message.success('退出成功');
+            }
+        },
+        out(){
+             this.$Modal.confirm({
+                title:"提示",
+                content:"确定要退出登录吗",
+                onOk:() =>{
+                    this.outInfo();
+                }
+            })
+        }
+    }
 }
 </script>
 
 <style>
-/* #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-} */
-
 .layout{
     border: 1px solid #d7dde4;
     background: #f5f7f9;
@@ -134,7 +164,7 @@ export default {
     overflow: hidden;
 }
 .layout-logo{
-    width: 90px;
+    width: 120px;
     height: 45px;
     background: #5b6270;
     border-radius: 3px;
@@ -157,7 +187,6 @@ a{
     background: #f0faff;
     z-index: 2;
 }
-
 
 .layout-nav a{
     color:#d7dde4
