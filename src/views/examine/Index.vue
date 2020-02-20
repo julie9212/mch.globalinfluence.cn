@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>文章审核</h2>
-        <br>    
+        <br>     
         <Row>
             <Col span="16" offset="8">
                 <Form inline>

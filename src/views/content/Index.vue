@@ -7,7 +7,7 @@
                         <Col span="20" offset="2">
                             <Form :model="form" :label-width="80"><br>
                                 <Row>
-                                    <Col span="8">
+                                    <Col span="12">
                                         <Form-item label="标题">
                                             <Input v-model="form.title" placeholder="请输入"></Input>
                                         </Form-item>
@@ -15,6 +15,21 @@
                                     <Col span="8">
                                         <Form-item label="小标题">
                                             <Input v-model="form.title_small" placeholder="请输入"></Input>
+                                        </Form-item>
+                                    </Col>
+                                </Row>
+                                 <Row>
+                                    <Col span="6">
+                                    <Form-item label="外部链接">
+                                            <Radio-group v-model="form.is_url">
+                                                <Radio label="1">开启</Radio>
+                                                <Radio label="0">关闭</Radio>
+                                            </Radio-group>
+                                        </Form-item>
+                                    </Col>
+                                    <Col span="12">
+                                        <Form-item label="外链">
+                                            <Input v-model="form.url" placeholder="请输入链接地址"></Input>
                                         </Form-item>
                                     </Col>
                                 </Row>
@@ -64,6 +79,13 @@
                                         </Form-item>
                                     </Col>
                                 </Row>
+                                <!-- <Row>
+                                    <Col span="16">
+                                        <Form-item label="视频连接">
+                                            <Input v-model="form.video_url" placeholder="请输入"></Input>
+                                        </Form-item>
+                                    </Col>
+                                </Row> -->
                                 <Row>
                                     <Col span="6">
                                         <Form-item label="所属栏目">
@@ -103,6 +125,13 @@
                                     <Col span="2">
                                         {{form.video_url}}
                                        <Button type="text" v-on:click="form.video_url=''" >删除视频</Button>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span="16">
+                                        <Form-item label="视频连接">
+                                            <Input v-model="form.video_url" placeholder="请输入"></Input>
+                                        </Form-item>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -189,6 +218,8 @@ import { quillEditor } from 'vue-quill-editor'
                     video_url:'',
                     file_url:'',
                     content: ``,
+                    url:'',
+                    is_url:'',
                 },
                 column: [],
             }
@@ -211,6 +242,7 @@ import { quillEditor } from 'vue-quill-editor'
                     if(res.info){
                         this.title = '修改内容';
                         this.form = res.info;
+                        this.form.is_url = res.info.is_url+'';
                         this.form.authority = res.info.authority + '';
                     }
                     this.column = res.column;

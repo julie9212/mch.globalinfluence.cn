@@ -7,21 +7,56 @@
                     <Col span="20" offset="2">
                         <Form :model="form" :label-width="80"><br>
                             <Row>
-                                <Col span="8">
+                                <Col span="12">
                                     <Form-item label="标题">
                                         <Input v-model="form.title" placeholder="请输入"></Input>
                                     </Form-item>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col span="8">
+                                <Col span="12">
+                                    <Form-item label="e-mail">
+                                        <Input v-model="form.email" placeholder="请输入"></Input>
+                                    </Form-item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span="6">
+                                    <Form-item label="电话1">
+                                        <Input v-model="form.phone" placeholder="请输入"></Input>
+                                    </Form-item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span="6">
+                                    <Form-item label="电话2">
+                                        <Input v-model="form.phone2" placeholder="请输入"></Input>
+                                    </Form-item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span="12">
+                                    <Form-item label="地址">
+                                        <Input v-model="form.address" placeholder="请输入"></Input>
+                                    </Form-item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span="12">
+                                    <Form-item label="版权">
+                                        <Input v-model="form.copyright" placeholder="请输入"></Input>
+                                    </Form-item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span="12">
                                     <Form-item label="关键词"> 
                                         <Input v-model="form.keywords" placeholder="请输入"></Input>
                                     </Form-item>
                                 </Col>
                             </Row>
                             <Row>
-                                <Col span="8">
+                                <Col span="12">
                                     <Form-item label="摘要">
                                         <Input v-model="form.description" type="textarea" placeholder="请输入..."></Input>
                                     </Form-item>
@@ -41,7 +76,7 @@
                                     <Button type="text" v-on:click="form.logo=''" >删除图片</Button>
                                 </Col>
                                 <Col span="4">
-                                    <img :src="form.logo" style="height:100px">
+                                    <img :src="form.logo" style="width:200px">
                                 </Col>
                             </Row>
                             <Row>

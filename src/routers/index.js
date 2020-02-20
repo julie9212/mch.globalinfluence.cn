@@ -35,6 +35,11 @@ export default [
           component: () => import('../views/examine/Index'),
         },
         {
+          path: '/meeting',
+          name: '内容列表模块',
+          component: () => import('../views/meeting/Index'),
+        },
+        {
           path: '/content/:column/:id',
           name: '添加内容模块',
           component: () => import('../views/content/Index'),

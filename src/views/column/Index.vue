@@ -114,6 +114,44 @@
                         }, 
                     },
                     {
+                        title: '类型',
+                        key: 'type',
+                        align: "center",
+                        render :(h,param) => {
+                            // console.log(param.row.type);
+                            let type;
+                            if(param.row.type == 1){
+                                type = "列表";
+                            }else{
+                                type = "内容";
+                            }
+                            return h('div',[
+                                h('span',{
+                                },type),
+                                h('Button',{
+                                    props:{
+                                        type:"text",
+                                        size:"small"
+                                    },
+                                    style:{
+                                        color:"#2db7f5"
+                                    },
+                                    on:{
+                                        click:()=>{
+                                            this.$Modal.confirm({
+                                                title:"提示",
+                                                content:"确定修改栏目类型吗",
+                                                onOk:() =>{
+                                                    this.changes(param.row.id);
+                                                }
+                                            })
+                                        }
+                                    }
+                                },'修改')
+                            ]);
+                        }
+                    },
+                    { 
                         title: '子栏目',
                         key: 'sobColumn',
                         align: "center",
@@ -196,15 +234,20 @@
                     name: '',
                     sort: 0,
                 };
-                // this.$refs.uploadFile.clearFiles();
             },
             async delete(id){
-                // console.log(id);
                 let res = await this.$api.column.delete({id:id});
-                console.log(res);
                 if(res){
                     this.list();
                     this.$Message.success('删除成功');
+                }
+            }, 
+            async changes(id) {
+                let res = await this.$api.column.changeType({id});
+                console.log(res);
+                if(res){
+                    this.list();
+                    this.$Message.success('操作成功');
                 }
             },
             // 子栏目跳转

@@ -50,6 +50,9 @@
                         <Option value="4" label="合作16">
                             <span>合作16</span>
                         </Option>
+                        <Option value="5" label="合作16">
+                            <span>banner</span>
+                        </Option>
                     </Select>
                 </Form-item>
                 <Form-item label="上传图片">
@@ -98,6 +101,10 @@
                     {
                         value : '4',
                         title :'合作16',
+                    },
+                    {
+                        value : '5',
+                        title :'banner',
                     },
                 ],
                 form: {
@@ -163,6 +170,8 @@
                                 type = "平台连接4";
                             }else if(param.row.type == 4){
                                 type = "合作16";
+                            }else if(param.row.type == 5){
+                                type = "banner";
                             }
                             return h("div",{},type)
                         },

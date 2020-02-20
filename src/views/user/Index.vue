@@ -41,6 +41,9 @@
                         <Radio label="2">vip用户</Radio>
                     </Radio-group>
                 </Form-item>
+                <Form-item label="用户">
+                    <Input type="text" v-model="form.abstract" placeholder="请输入用户介绍，20字以内"></Input>
+                </Form-item>
                 <Form-item label="是否启用">
                     <Radio-group v-model="form.status">
                         <Radio label="1">启用</Radio>
@@ -136,6 +139,7 @@
                     password: 'root',
                     phone: '',
                     vip: '1',
+                    abstract:'',
                     status: '1',
                     head_url: '',
                 },

@@ -54,6 +54,9 @@ let api = {
         update: param => { 
             return ajax.post('column/update', param);
         },
+        changeType: id => {
+            return ajax.post('column/changeType', id);
+        },
     },
     subcolumn: {
         list: param => { 
@@ -112,6 +115,14 @@ let api = {
         },
        examine: param => { 
             return ajax.post('examine/examine', param);
+        },
+    },
+    meeting: {
+        list: param => { 
+            return ajax.post('meeting/list', param);
+        },
+       examine: param => { 
+            return ajax.post('meeting/examine', param);
         },
     },
     ad: {

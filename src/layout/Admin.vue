@@ -71,6 +71,9 @@
                       <MenuItem name="3-2">
                         <router-link to="/application">合作申请</router-link>
                       </MenuItem>
+                      <MenuItem name="3-3">
+                        <router-link to="/meeting">参会申请</router-link>
+                      </MenuItem>
                   </Submenu>
                   <Submenu name="4">
                       <template slot="title">
